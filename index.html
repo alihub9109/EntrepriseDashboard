@@ -4,365 +4,439 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enterprise Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <div class="logo-icon">E</div>
-            <div class="logo-text">Enterprise</div>
-        </div>
-        <div class="sidebar-menu">
-            <a href="#" class="nav-link active">
-                <i class="bi bi-speedometer2"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="#" class="nav-link">
-                <i class="bi bi-people"></i>
-                <span>Team</span>
-            </a>
-            <a href="#" class="nav-link">
-                <i class="bi bi-bar-chart"></i>
-                <span>Analytics</span>
-            </a>
-            <a href="#" class="nav-link">
-                <i class="bi bi-briefcase"></i>
-                <span>Projects</span>
-            </a>
-            <a href="#" class="nav-link">
-                <i class="bi bi-calendar"></i>
-                <span>Calendar</span>
-            </a>
-            <a href="#" class="nav-link">
-                <i class="bi bi-envelope"></i>
-                <span>Messages</span>
-            </a>
-            <a href="#" class="nav-link">
-                <i class="bi bi-gear"></i>
-                <span>Settings</span>
-            </a>
-        </div>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay">
+        <div class="loading-spinner"></div>
     </div>
 
-    <!-- Main Content -->
-    <div class="main">
-        <!-- Topbar -->
-        <div class="topbar">
-            <button class="btn btn-sm btn-outline-secondary" id="sidebarToggle">
-                <i class="bi bi-list"></i>
-            </button>
-            
-            <div class="search-bar ms-3">
-                <i class="bi bi-search"></i>
-                <input type="text" class="form-control" placeholder="Search...">
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 4L4 8V16L12 20L20 16V8L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M12 12L20 8M12 12L4 8M12 12V20" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Enterprise</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
             </div>
-            
-            <div class="topbar-menu">
-                <div class="notification-btn">
-                    <i class="bi bi-bell"></i>
-                    <div class="notification-badge">3</div>
-                </div>
-                
-                <div class="user-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" class="user-avatar" alt="User">
-                </div>
-                <div class="d-none d-lg-flex align-items-center ms-2">
-                    <span class="user-name">Sarah Johnson</span>
-                    <i class="user-dropdown bi bi-chevron-down"></i>
-                </div>
-                
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i> Settings</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-question-circle me-2"></i> Help</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="#">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 21H4V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M4 16L8 12L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M18 9H15V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 6H21L19 20H5L3 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 10C16 8.93913 15.5786 7.92172 14.8284 7.17157C14.0783 6.42143 13.0609 6 12 6C10.9391 6 9.92172 6.42143 9.17157 7.17157C8.42143 7.92172 8 8.93913 8 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Sales</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 3.13C16.8604 3.3503 17.623 3.8507 18.1676 4.55231C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M19.4 15C19.2669 15.3016 19.227 15.6363 19.2851 15.9606C19.3432 16.2849 19.4968 16.5835 19.725 16.8175C19.9532 17.0515 20.245 17.2101 20.5616 17.2717C20.8782 17.3333 21.2045 17.2953 21.5 17.1625C21.6159 17.6261 21.6198 18.1085 21.5114 18.5737C21.403 19.0389 21.185 19.4731 20.8741 19.8416C20.5632 20.2101 20.1676 20.5027 19.7191 20.6966C19.2706 20.8905 18.7815 20.9803 18.2905 20.9589C17.7995 20.9375 17.3201 20.8054 16.8889 20.5726C16.4576 20.3398 16.086 20.0126 15.803 19.6167C15.52 19.2207 15.3333 18.7669 15.2575 18.2906C15.1817 17.8143 15.2188 17.3284 15.3662 16.8699C15.5136 16.4115 15.7673 15.9927 16.1075 15.6475C16.4477 15.3023 16.8649 15.0405 17.325 14.8833" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2.6 15C2.73312 15.3016 2.773 15.6363 2.71491 15.9606C2.65682 16.2849 2.50321 16.5835 2.275 16.8175C2.04679 17.0515 1.75499 17.2101 1.43839 17.2717C1.12179 17.3333 0.795537 17.2953 0.5 17.1625C0.384134 17.6261 0.380246 18.1085 0.488631 18.5737C0.597016 19.0389 0.815033 19.4731 1.12594 19.8416C1.43684 20.2101 1.83241 20.5027 2.28089 20.6966C2.72937 20.8905 3.21853 20.9803 3.70954 20.9589C4.20055 20.9375 4.67989 20.8054 5.11114 20.5726C5.54239 20.3398 5.91404 20.0126 6.197 19.6167C6.47996 19.2207 6.66672 18.7669 6.74254 18.2906C6.81836 17.8143 6.7812 17.3284 6.63383 16.8699C6.48645 16.4115 6.23265 15.9927 5.89247 15.6475C5.55229 15.3023 5.13506 15.0405 4.675 14.8833" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8.6 8.6C8.73312 8.29845 8.773 7.96372 8.71491 7.63943C8.65682 7.31514 8.50321 7.01653 8.275 6.78254C8.04679 6.54855 7.75499 6.38991 7.43839 6.32831C7.12179 6.26671 6.79554 6.30466 6.5 6.4375C6.38413 5.97386 6.38025 5.4915 6.48863 5.02631C6.59702 4.56112 6.81503 4.12689 7.12594 3.75843C7.43684 3.38997 7.83241 3.09725 8.28089 2.90337C8.72937 2.70949 9.21853 2.61974 9.70954 2.64113C10.2006 2.66252 10.6799 2.79465 11.1111 3.02744C11.5424 3.26023 11.914 3.58742 12.197 3.98335C12.48 4.37928 12.6667 4.83306 12.7425 5.30937C12.8184 5.78568 12.7812 6.27156 12.6338 6.73004C12.4865 7.18852 12.2327 7.60728 11.8925 7.9525C11.5523 8.29772 11.1351 8.55945 10.675 8.71667" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M15.3662 8.6C15.2331 8.29845 15.1932 7.96372 15.2513 7.63943C15.3094 7.31514 15.463 7.01653 15.6912 6.78254C15.9194 6.54855 16.2112 6.38991 16.5278 6.32831C16.8444 6.26671 17.1707 6.30466 17.4662 6.4375C17.5821 5.97386 17.586 5.4915 17.4776 5.02631C17.3692 4.56112 17.1512 4.12689 16.8403 3.75843C16.5294 3.38997 16.1338 3.09725 15.6853 2.90337C15.2369 2.70949 14.7477 2.61974 14.2567 2.64113C13.7657 2.66252 13.2863 2.79465 12.8551 3.02744C12.4238 3.26023 12.0522 3.58742 11.7692 3.98335C11.4863 4.37928 11.2995 4.83306 11.2237 5.30937C11.1479 5.78568 11.185 6.27156 11.3324 6.73004C11.4798 7.18852 11.7336 7.60728 12.0738 7.9525C12.414 8.29772 12.8312 8.55945 13.2912 8.71667" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Settings</span>
+                        </a>
+                    </li>
                 </ul>
-            </div>
-        </div>
+            </nav>
+        </aside>
 
-        <!-- Content -->
-        <div class="content">
-            <div class="page-header">
-                <h1 class="page-title">Dashboard</h1>
-                <div>
-                    <button class="btn btn-primary">
-                        <i class="bi bi-plus-lg me-2"></i> New Report
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header Bar -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h1>Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <button class="theme-toggle" id="themeToggle">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="light-icon">
+                            <path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 2V4M12 20V22M4 12H2M6.31412 6.31412L4.8999 4.8999M17.6859 6.31412L19.1001 4.8999M6.31412 17.69L4.8999 19.1042M17.6859 17.69L19.1001 19.1042M22 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="dark-icon">
+                            <path d="M21 12.79C20.8427 14.4922 20.2039 16.1144 19.1582 17.4668C18.1125 18.8192 16.7035 19.8458 15.0957 20.4265C13.4879 21.0073 11.748 21.1181 10.0795 20.7461C8.41102 20.3741 6.88299 19.5345 5.67422 18.3258C4.46545 17.117 3.62594 15.589 3.2539 13.9205C2.88186 12.252 2.99274 10.5121 3.57348 8.9043C4.15423 7.29651 5.18085 5.88749 6.53324 4.84182C7.88562 3.79615 9.50782 3.15731 11.21 3C10.2134 4.34827 9.73375 6.00945 9.85849 7.68141C9.98324 9.35338 10.7039 10.9251 11.8894 12.1106C13.0749 13.2961 14.6466 14.0168 16.3186 14.1415C17.9906 14.2663 19.6517 13.7866 21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </button>
-                </div>
-            </div>
-            
-            <!-- KPI Cards -->
-            <div class="row mb-4">
-                <div class="col-md-6 col-lg-3 mb-4 fade-in">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-icon primary">
-                                <i class="bi bi-currency-dollar"></i>
-                            </div>
-                            <h5 class="card-title">Total Revenue</h5>
-                            <h3 class="card-value">$48,265</h3>
-                            <span class="card-change positive">
-                                <i class="bi bi-arrow-up"></i> 12.5% vs last month
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6 col-lg-3 mb-4 fade-in delay-1">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-icon success">
-                                <i class="bi bi-people"></i>
-                            </div>
-                            <h5 class="card-title">New Customers</h5>
-                            <h3 class="card-value">1,254</h3>
-                            <span class="card-change positive">
-                                <i class="bi bi-arrow-up"></i> 5.3% vs last month
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6 col-lg-3 mb-4 fade-in delay-2">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-icon warning">
-                                <i class="bi bi-cart"></i>
-                            </div>
-                            <h5 class="card-title">Total Orders</h5>
-                            <h3 class="card-value">3,487</h3>
-                            <span class="card-change negative">
-                                <i class="bi bi-arrow-down"></i> 2.1% vs last month
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6 col-lg-3 mb-4 fade-in delay-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-icon danger">
-                                <i class="bi bi-activity"></i>
-                            </div>
-                            <h5 class="card-title">Conversion Rate</h5>
-                            <h3 class="card-value">3.65%</h3>
-                            <span class="card-change positive">
-                                <i class="bi bi-arrow-up"></i> 1.2% vs last month
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Charts Row -->
-            <div class="row mb-4">
-                <div class="col-lg-8 mb-4 fade-in">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="card-title mb-0">Revenue Overview</h5>
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                        This Month
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">Today</a></li>
-                                        <li><a class="dropdown-item" href="#">This Week</a></li>
-                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                                    </ul>
+                    <div class="notification-dropdown">
+                        <button class="notification-btn">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <div class="notification-dropdown-content">
+                            <div class="notification-item">
+                                <div class="notification-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="notification-text">
+                                    <p>New report generated</p>
+                                    <small>2 minutes ago</small>
                                 </div>
                             </div>
-                            <div class="chart-container">
-                                <canvas id="revenueChart"></canvas>
+                            <div class="notification-item">
+                                <div class="notification-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="notification-text">
+                                    <p>Meeting in 15 minutes</p>
+                                    <small>10 minutes ago</small>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="notification-text">
+                                    <p>You have a new message</p>
+                                    <small>1 hour ago</small>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="user-dropdown">
+                        <button class="user-btn">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar">
+                            <span>John Doe</span>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="user-dropdown-content">
+                            <a href="#">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M6 20C6 17.7909 7.79086 16 10 16H14C16.2091 16 18 17.7909 18 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Profile</span>
+                            </a>
+                            <a href="#">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M12 16V12M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Help</span>
+                            </a>
+                            <a href="#">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 12V17M14 12V17M4 7H20M19 7L18.133 19.142C18.0971 19.6466 17.8713 20.1188 17.5011 20.4636C17.1309 20.8083 16.6439 21 16.138 21H7.862C7.35614 21 6.86907 20.8083 6.49889 20.4636C6.1287 20.1188 5.90292 19.6466 5.867 19.142L5 7H19ZM15 7V4C15 3.73478 14.8946 3.48043 14.7071 3.29289C14.5196 3.10536 14.2652 3 14 3H10C9.73478 3 9.48043 3.10536 9.29289 3.29289C9.10536 3.48043 9 3.73478 9 4V7H15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Logout</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="col-lg-4 mb-4 fade-in delay-1">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">Revenue by Category</h5>
-                            <div class="chart-container">
-                                <canvas id="categoryChart"></canvas>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Stats Cards -->
+                <div class="stats-cards">
+                    <div class="stats-card">
+                        <div class="stats-card-icon revenue">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 1V23M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6313 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6313 13.6815 18 14.5717 18 15.5C18 16.4283 17.6313 17.3185 16.9749 17.9749C16.3185 18.6313 15.4283 19 14.5 19H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="stats-card-info">
+                            <h3>$24,780</h3>
+                            <p>Total Revenue</p>
+                        </div>
+                        <div class="stats-card-change positive">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 19V5M5 12L12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>12.5%</span>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-card-icon users">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 3.13C16.8604 3.3503 17.623 3.8507 18.1676 4.55231C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="stats-card-info">
+                            <h3>1,245</h3>
+                            <p>Total Users</p>
+                        </div>
+                        <div class="stats-card-change positive">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 19V5M5 12L12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>8.2%</span>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-card-icon sales">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 6H21L19 20H5L3 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 10C16 8.93913 15.5786 7.92172 14.8284 7.17157C14.0783 6.42143 13.0609 6 12 6C10.9391 6 9.92172 6.42143 9.17157 7.17157C8.42143 7.92172 8 8.93913 8 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="stats-card-info">
+                            <h3>856</h3>
+                            <p>Total Sales</p>
+                        </div>
+                        <div class="stats-card-change negative">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5V19M19 12L12 19L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>3.4%</span>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-card-icon performance">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="stats-card-info">
+                            <h3>92.7%</h3>
+                            <p>Performance</p>
+                        </div>
+                        <div class="stats-card-change positive">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 19V5M5 12L12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>1.8%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Revenue Overview</h3>
+                            <div class="chart-period">
+                                <button class="active">Week</button>
+                                <button>Month</button>
+                                <button>Year</button>
                             </div>
                         </div>
+                        <div class="chart-container">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Sales by Category</h3>
+                            <div class="chart-period">
+                                <button class="active">Week</button>
+                                <button>Month</button>
+                                <button>Year</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Table Section -->
+                <div class="table-section">
+                    <div class="table-header">
+                        <h3>Recent Users</h3>
+                        <button class="view-all-btn">View All</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="user-info">
+                                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User Avatar">
+                                            <span>Sarah Johnson</span>
+                                        </div>
+                                    </td>
+                                    <td>sarah.johnson@example.com</td>
+                                    <td>Admin</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                    <td>
+                                        <button class="action-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13M17.5858 3.58579C18.3668 2.80474 19.6332 2.80474 20.4142 3.58579C21.1953 4.36683 21.1953 5.63316 20.4142 6.41421L11.8284 15H9L9 12.1716L17.5858 3.58579Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                        <button class="action-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M15 7V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V7M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="user-info">
+                                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar">
+                                            <span>Michael Chen</span>
+                                        </div>
+                                    </td>
+                                    <td>michael.chen@example.com</td>
+                                    <td>Editor</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                    <td>
+                                        <button class="action-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13M17.5858 3.58579C18.3668 2.80474 19.6332 2.80474 20.4142 3.58579C21.1953 4.36683 21.1953 5.63316 20.4142 6.41421L11.8284 15H9L9 12.1716L17.5858 3.58579Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                        <button class="action-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M15 7V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V7M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="user-info">
+                                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User Avatar">
+                                            <span>Emily Rodriguez</span>
+                                        </div>
+                                    </td>
+                                    <td>emily.rodriguez@example.com</td>
+                                    <td>Viewer</td>
+                                    <td><span class="status-badge pending">Pending</span></td>
+                                    <td>
+                                        <button class="action-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13M17.5858 3.58579C18.3668 2.80474 19.6332 2.80474 20.4142 3.58579C21.1953 4.36683 21.1953 5.63316 20.4142 6.41421L11.8284 15H9L9 12.1716L17.5858 3.58579Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                        <button class="action-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M15 7V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V7M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="user-info">
+                                            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="User Avatar">
+                                            <span>David Wilson</span>
+                                        </div>
+                                    </td>
+                                    <td>david.wilson@example.com</td>
+                                    <td>Editor</td>
+                                    <td><span class="status-badge inactive">Inactive</span></td>
+                                    <td>
+                                        <button class="action-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13M17.5858 3.58579C18.3668 2.80474 19.6332 2.80474 20.4142 3.58579C21.1953 4.36683 21.1953 5.63316 20.4142 6.41421L11.8284 15H9L9 12.1716L17.5858 3.58579Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                        <button class="action-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M15 7V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V7M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="user-info">
+                                            <img src="https://randomuser.me/api/portraits/women/90.jpg" alt="User Avatar">
+                                            <span>Jennifer Lee</span>
+                                        </div>
+                                    </td>
+                                    <td>jennifer.lee@example.com</td>
+                                    <td>Admin</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                    <td>
+                                        <button class="action-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13M17.5858 3.58579C18.3668 2.80474 19.6332 2.80474 20.4142 3.58579C21.1953 4.36683 21.1953 5.63316 20.4142 6.41421L11.8284 15H9L9 12.1716L17.5858 3.58579Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                        <button class="action-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M15 7V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V7M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            
-            <!-- Table Row -->
-            <div class="row fade-in delay-2">
-                <div class="col-12">
-                    <div class="card data-table">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="card-title mb-0">Recent Transactions</h5>
-                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#newTransactionModal">
-                                    <i class="bi bi-plus-lg me-1"></i> Add New
-                                </button>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover" id="transactionsTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Customer</th>
-                                            <th>Date</th>
-                                            <th>Amount</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="user-table-avatar">
-                                                    <span>Michael Johnson</span>
-                                                </div>
-                                            </td>
-                                            <td>Jun 12, 2023</td>
-                                            <td>$1,250.00</td>
-                                            <td><span class="status-badge success">Completed</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-secondary">
-                                                    <i class="bi bi-eye"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" class="user-table-avatar">
-                                                    <span>Sarah Williams</span>
-                                                </div>
-                                            </td>
-                                            <td>Jun 11, 2023</td>
-                                            <td>$890.50</td>
-                                            <td><span class="status-badge success">Completed</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-secondary">
-                                                    <i class="bi bi-eye"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img src="https://randomuser.me/api/portraits/men/75.jpg" class="user-table-avatar">
-                                                    <span>Robert Davis</span>
-                                                </div>
-                                            </td>
-                                            <td>Jun 10, 2023</td>
-                                            <td>$2,450.00</td>
-                                            <td><span class="status-badge warning">Pending</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-secondary">
-                                                    <i class="bi bi-eye"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img src="https://randomuser.me/api/portraits/women/63.jpg" class="user-table-avatar">
-                                                    <span>Jennifer Miller</span>
-                                                </div>
-                                            </td>
-                                            <td>Jun 9, 2023</td>
-                                            <td>$1,750.00</td>
-                                            <td><span class="status-badge danger">Cancelled</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-secondary">
-                                                    <i class="bi bi-eye"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img src="https://randomuser.me/api/portraits/men/81.jpg" class="user-table-avatar">
-                                                    <span>David Wilson</span>
-                                                </div>
-                                            </td>
-                                            <td>Jun 8, 2023</td>
-                                            <td>$3,210.00</td>
-                                            <td><span class="status-badge success">Completed</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-secondary">
-                                                    <i class="bi bi-eye"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
-    <!-- New Transaction Modal -->
-    <div class="modal fade" id="newTransactionModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add New Transaction</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label class="form-label">Customer</label>
-                            <select class="form-select">
-                                <option selected>Select customer</option>
-                                <option>Michael Johnson</option>
-                                <option>Sarah Williams</option>
-                                <option>Robert Davis</option>
-                                <option>Jennifer Miller</option>
-                                <option>David Wilson</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Amount</label>
-                            <input type="text" class="form-control" placeholder="Enter amount">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Date</label>
-                            <input type="date" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select">
-                                <option selected>Select status</option>
-                                <option>Completed</option>
-                                <option>Pending</option>
-                                <option>Cancelled</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Save Transaction</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
