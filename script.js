@@ -10,10 +10,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Sidebar toggle functionality
     const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarToggleMobile = document.getElementById('sidebarToggleMobile');
     const sidebar = document.querySelector('.sidebar');
+    const mobileOverlay = document.querySelector('.mobile-sidebar-overlay');
     
-    sidebarToggle.addEventListener('click', function() {
+    function toggleSidebar() {
         sidebar.classList.toggle('active');
+        document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+    }
+    
+    sidebarToggle.addEventListener('click', toggleSidebar);
+    sidebarToggleMobile.addEventListener('click', toggleSidebar);
+    mobileOverlay.addEventListener('click', toggleSidebar);
+
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', function(event) {
+        const isClickInsideSidebar = sidebar.contains(event.target);
+        const isClickOnToggle = sidebarToggle.contains(event.target) || 
+                              sidebarToggleMobile.contains(event.target);
+        
+        if (window.innerWidth <= 992 && !isClickInsideSidebar && !isClickOnToggle) {
+            sidebar.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     });
 
     // Theme toggle functionality
@@ -25,6 +44,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Save preference to localStorage
         const isDarkMode = document.body.classList.contains('dark-mode');
         localStorage.setItem('darkMode', isDarkMode);
+        
+        // Update charts for dark mode
+        updateChartsForTheme();
     });
 
     // Check for saved theme preference
@@ -35,14 +57,36 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize charts
     initializeCharts();
 
-    // Close sidebar when clicking outside on mobile
+    // Close dropdowns when clicking outside
     document.addEventListener('click', function(event) {
-        const isClickInsideSidebar = sidebar.contains(event.target);
-        const isClickOnToggle = sidebarToggle.contains(event.target);
-        
-        if (window.innerWidth <= 992 && !isClickInsideSidebar && !isClickOnToggle) {
-            sidebar.classList.remove('active');
+        if (!event.target.closest('.notification-dropdown')) {
+            document.querySelectorAll('.notification-dropdown-content').forEach(dropdown => {
+                dropdown.style.opacity = '0';
+                dropdown.style.visibility = 'hidden';
+                dropdown.style.top = '120%';
+            });
         }
+        
+        if (!event.target.closest('.user-dropdown')) {
+            document.querySelectorAll('.user-dropdown-content').forEach(dropdown => {
+                dropdown.style.opacity = '0';
+                dropdown.style.visibility = 'hidden';
+                dropdown.style.top = '120%';
+            });
+        }
+    });
+
+    // Window resize handler
+    window.addEventListener('resize', function() {
+        // Close sidebar if window is resized to larger than 992px
+        if (window.innerWidth > 992 && sidebar.classList.contains('active')) {
+            sidebar.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Update charts on resize
+        if (window.lineChart) window.lineChart.resize();
+        if (window.barChart) window.barChart.resize();
     });
 });
 
@@ -50,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeCharts() {
     // Line Chart
     const lineCtx = document.getElementById('lineChart').getContext('2d');
-    const lineChart = new Chart(lineCtx, {
+    window.lineChart = new Chart(lineCtx, {
         type: 'line',
         data: {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
@@ -64,48 +108,12 @@ function initializeCharts() {
                 tension: 0.4
             }]
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                    callbacks: {
-                        label: function(context) {
-                            return '$' + context.parsed.y.toLocaleString();
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.05)',
-                        drawBorder: false
-                    },
-                    ticks: {
-                        callback: function(value) {
-                            return '$' + value.toLocaleString();
-                        }
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
-        }
+        options: getChartOptions('$')
     });
 
     // Bar Chart
     const barCtx = document.getElementById('barChart').getContext('2d');
-    const barChart = new Chart(barCtx, {
+    window.barChart = new Chart(barCtx, {
         type: 'bar',
         data: {
             labels: ['Electronics', 'Clothing', 'Home', 'Books', 'Other'],
@@ -129,64 +137,80 @@ function initializeCharts() {
                 borderWidth: 1
             }]
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return '$' + context.parsed.y.toLocaleString();
-                        }
-                    }
+        options: getChartOptions('$')
+    });
+}
+
+// Get chart options based on theme
+function getChartOptions(prefix = '') {
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+    const textColor = isDarkMode ? '#f0f0f0' : '#333';
+    
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false,
+                labels: {
+                    color: textColor
                 }
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.05)',
-                        drawBorder: false
-                    },
-                    ticks: {
-                        callback: function(value) {
-                            return '$' + value.toLocaleString();
-                        }
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
+            tooltip: {
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                    label: function(context) {
+                        return prefix + context.parsed.y.toLocaleString();
                     }
                 }
             }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: gridColor,
+                    drawBorder: false
+                },
+                ticks: {
+                    color: textColor,
+                    callback: function(value) {
+                        return prefix + value.toLocaleString();
+                    }
+                }
+            },
+            x: {
+                grid: {
+                    display: false,
+                    drawBorder: false
+                },
+                ticks: {
+                    color: textColor
+                }
+            }
         }
-    });
+    };
+}
 
-    // Update charts when theme changes
-    document.body.addEventListener('change', function() {
-        if (document.body.classList.contains('dark-mode')) {
-            // Update line chart for dark mode
-            lineChart.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.05)';
-            lineChart.options.scales.x.grid.color = 'rgba(255, 255, 255, 0.05)';
-            
-            // Update bar chart for dark mode
-            barChart.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.05)';
-            barChart.options.scales.x.grid.color = 'rgba(255, 255, 255, 0.05)';
-        } else {
-            // Update line chart for light mode
-            lineChart.options.scales.y.grid.color = 'rgba(0, 0, 0, 0.05)';
-            lineChart.options.scales.x.grid.color = 'rgba(0, 0, 0, 0.05)';
-            
-            // Update bar chart for light mode
-            barChart.options.scales.y.grid.color = 'rgba(0, 0, 0, 0.05)';
-            barChart.options.scales.x.grid.color = 'rgba(0, 0, 0, 0.05)';
-        }
-        
-        lineChart.update();
-        barChart.update();
-    });
+// Update charts when theme changes
+function updateChartsForTheme() {
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+    const textColor = isDarkMode ? '#f0f0f0' : '#333';
+    
+    if (window.lineChart) {
+        window.lineChart.options.scales.y.grid.color = gridColor;
+        window.lineChart.options.scales.y.ticks.color = textColor;
+        window.lineChart.options.scales.x.ticks.color = textColor;
+        window.lineChart.update();
+    }
+    
+    if (window.barChart) {
+        window.barChart.options.scales.y.grid.color = gridColor;
+        window.barChart.options.scales.y.ticks.color = textColor;
+        window.barChart.options.scales.x.ticks.color = textColor;
+        window.barChart.update();
+    }
 }
